@@ -49,7 +49,9 @@
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
+    "bn.js": "^4.11.8",
     "dotenv": "^2.0.0",
+    "ethereumjs-abi": "^0.6.4",
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   },
