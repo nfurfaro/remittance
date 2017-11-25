@@ -12,25 +12,21 @@ contract Remittance is Freezable {
     mapping(bytes32 => LockBox) public LockBoxCluster;
     address[] public recipientAddresses;
 
-    event LogRemittance(address depositor, uint amount);
+    event LogRemittance(address depositor, uint amount, uint _fundsWaiting);
     event LogClaim(address claimant, uint funds, bool _invalidKey);
    
     function Remittance() {}
 
 
+    // for testing use!!
+    function hashHelper(string _password, address _recipient)
+        public
+        pure
+        returns(bytes32 hashedPassword)
+    {    
+        return keccak256(_password, _recipient);
+    }    
 
-// for testing use!!
-    // function passwordHasher(string _password)
-    //     public
-    //     pure
-    //     returns(bytes32 hashedPassword)
-    // {    
-    //     return keccak256(_password);
-    // }   
-
-
-
-    // _password could be hashed, but I'm not sure that hashing them provides an extra layer of security, as the passwords are single-use only.(actually, the key is single use)
     function sendRemittance(string _password, address _recipient)
         public
         onlyOwner
@@ -42,7 +38,7 @@ contract Remittance is Freezable {
         require(LockBoxCluster[key].invalidKey == false); 
         LockBoxCluster[key].fundsWaiting += msg.value;
         recipientAddresses.push(_recipient);
-        LogRemittance(msg.sender, msg.value);
+        LogRemittance(msg.sender, msg.value, LockBoxCluster[key].fundsWaiting);
         return true; 
     }
 
